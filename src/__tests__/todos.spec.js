@@ -5,12 +5,10 @@ const app = require('../');
 
 describe('Todos', () => {
   it("should be able to list all user's todo", async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user1'
-      });
+    const userResponse = await request(app).post('/users').send({
+      name: 'John Doe',
+      username: 'user1',
+    });
 
     const todoDate = new Date();
 
@@ -18,7 +16,7 @@ describe('Todos', () => {
       .post('/todos')
       .send({
         title: 'test todo',
-        deadline: todoDate
+        deadline: todoDate,
       })
       .set('username', userResponse.body.username);
 
@@ -26,20 +24,14 @@ describe('Todos', () => {
       .get('/todos')
       .set('username', userResponse.body.username);
 
-    expect(response.body).toEqual(
-      expect.arrayContaining([
-        todoResponse.body
-      ]),
-    )
+    expect(response.body).toEqual(expect.arrayContaining([todoResponse.body]));
   });
 
-  it('should be able to create a new todo', async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user2'
-      });
+  it('should be asble to create a new todo', async () => {
+    const userResponse = await request(app).post('/users').send({
+      name: 'John Doe',
+      username: 'user2',
+    });
 
     const todoDate = new Date();
 
@@ -47,7 +39,7 @@ describe('Todos', () => {
       .post('/todos')
       .send({
         title: 'test todo',
-        deadline: todoDate
+        deadline: todoDate,
       })
       .set('username', userResponse.body.username)
       .expect(201);
@@ -55,19 +47,17 @@ describe('Todos', () => {
     expect(response.body).toMatchObject({
       title: 'test todo',
       deadline: todoDate.toISOString(),
-      done: false
+      done: false,
     });
     expect(validate(response.body.id)).toBe(true);
     expect(response.body.created_at).toBeTruthy();
   });
 
   it('should be able to update a todo', async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user7'
-      });
+    const userResponse = await request(app).post('/users').send({
+      name: 'John Doe',
+      username: 'user7',
+    });
 
     const todoDate = new Date();
 
@@ -75,7 +65,7 @@ describe('Todos', () => {
       .post('/todos')
       .send({
         title: 'test todo',
-        deadline: todoDate
+        deadline: todoDate,
       })
       .set('username', userResponse.body.username);
 
@@ -83,24 +73,22 @@ describe('Todos', () => {
       .put(`/todos/${todoResponse.body.id}`)
       .send({
         title: 'update title',
-        deadline: todoDate
+        deadline: todoDate,
       })
       .set('username', userResponse.body.username);
 
     expect(response.body).toMatchObject({
       title: 'update title',
       deadline: todoDate.toISOString(),
-      done: false
+      done: false,
     });
   });
 
   it('should not be able to update a non existing todo', async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user8'
-      });
+    const userResponse = await request(app).post('/users').send({
+      name: 'John Doe',
+      username: 'user8',
+    });
 
     const todoDate = new Date();
 
@@ -108,7 +96,7 @@ describe('Todos', () => {
       .put('/todos/invalid-todo-id')
       .send({
         title: 'update title',
-        deadline: todoDate
+        deadline: todoDate,
       })
       .set('username', userResponse.body.username)
       .expect(404);
@@ -117,12 +105,10 @@ describe('Todos', () => {
   });
 
   it('should be able to mark a todo as done', async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user3'
-      });
+    const userResponse = await request(app).post('/users').send({
+      name: 'John Doe',
+      username: 'user3',
+    });
 
     const todoDate = new Date();
 
@@ -130,7 +116,7 @@ describe('Todos', () => {
       .post('/todos')
       .send({
         title: 'test todo',
-        deadline: todoDate
+        deadline: todoDate,
       })
       .set('username', userResponse.body.username);
 
@@ -140,17 +126,15 @@ describe('Todos', () => {
 
     expect(response.body).toMatchObject({
       ...todoResponse.body,
-      done: true
+      done: true,
     });
   });
 
   it('should not be able to mark a non existing todo as done', async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user4'
-      });
+    const userResponse = await request(app).post('/users').send({
+      name: 'John Doe',
+      username: 'user4',
+    });
 
     const response = await request(app)
       .patch('/todos/invalid-todo-id/done')
@@ -161,12 +145,10 @@ describe('Todos', () => {
   });
 
   it('should be able to delete a todo', async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user5'
-      });
+    const userResponse = await request(app).post('/users').send({
+      name: 'John Doe',
+      username: 'user5',
+    });
 
     const todoDate = new Date();
 
@@ -174,7 +156,7 @@ describe('Todos', () => {
       .post('/todos')
       .send({
         title: 'test todo',
-        deadline: todoDate
+        deadline: todoDate,
       })
       .set('username', userResponse.body.username);
 
@@ -191,12 +173,10 @@ describe('Todos', () => {
   });
 
   it('should not be able to delete a non existing todo', async () => {
-    const userResponse = await request(app)
-      .post('/users')
-      .send({
-        name: 'John Doe',
-        username: 'user6'
-      });
+    const userResponse = await request(app).post('/users').send({
+      name: 'John Doe',
+      username: 'user6',
+    });
 
     const response = await request(app)
       .delete('/todos/invalid-todo-id')
